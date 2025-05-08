@@ -23,8 +23,8 @@ services:
      ports:
        - 3000:3000
      environment:
-       - GF_SECURITY_ADMIN_USER=friedfisch      
-       - GF_SECURITY_ADMIN_PASSWORD=Alter007
+       - GF_SECURITY_ADMIN_USER=Schwanzer69      
+       - GF_SECURITY_ADMIN_PASSWORD=HappyHippo
      networks:
        - monitoring
 

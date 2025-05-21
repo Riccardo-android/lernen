@@ -31,5 +31,5 @@ services:
 networks:
   monitoring:
     driver: bridge
-    external: true
+    #external: true - bringt nur was wenn man schon ein passendes netzwerk hat. auskommentiert erstellt er ein neues netztwerk
 

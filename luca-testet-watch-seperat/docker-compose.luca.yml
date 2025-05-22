@@ -1,19 +1,22 @@
 version: '3'
 services:
   dwd-exporter:
-    build: "./"
+    build:
+      context: ./
+      dockerfile: Dockerfile-luca
     ports:
-            - "9110:9110"
+      - "9110:9110"
     restart: unless-stopped
     networks:
-            - monitoring
+      - monitoring
+
 
   prometheus:
     image: prom/prometheus
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus-luca.yml:/etc/prometheus/prometheus-luca.yml
+      - ./prometheus-luca.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitoring
 
@@ -34,3 +37,5 @@ networks:
     #external: true - bringt nur was wenn man schon ein
     #passendes netzwerk hat. auskommentiert erstellt er ein
     #neues netztwerk
+
+    #docker compose -f docker-compose.luca.yml up --build

@@ -1,0 +1,10 @@
+watch:
+  # Wenn sich export.py ändert, wird der betroffene Container neu gebaut
+  - path: ./export.py
+    action: rebuild
+
+  # Wenn sich etwas im Ordner "server stuff" ändert, wird ebenfalls neu gebaut
+  # Wichtig: Da ein Leerzeichen im Pfad ist, muss dieser in Anführungszeichen gesetzt werden
+  - path: "./server stuff"
+    action: rebuild
+

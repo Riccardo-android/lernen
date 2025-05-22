@@ -1,10 +1,10 @@
 watch:
-  # Wenn sich export.py ändert, wird der betroffene Container neu gebaut
-  - path: ./export.py
+  # Wenn sich export-luca.py ändert, wird der betroffene Container neu gebaut
+  - path: ./export-luca.py
     action: rebuild
 
-  # Wenn sich etwas im Ordner "server stuff" ändert, wird ebenfalls neu gebaut
-  # Wichtig: Da ein Leerzeichen im Pfad ist, muss dieser in Anführungszeichen gesetzt werden
-  - path: "./server stuff"
+  # Wenn sich etwas im Ordner "luca-testet-watch-seperat" ändert, wird ebenfalls neu gebaut
+  # Wichtig: Da der Ordner Bindestriche enthält, reicht das, keine Anführungszeichen nötig
+  - path: ./luca-testet-watch-seperat
     action: rebuild
 

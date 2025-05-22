@@ -1,0 +1,36 @@
+version: '3'
+services:
+  dwd-exporter:
+    build: "./"
+    ports:
+            - "9110:9110"
+    restart: unless-stopped
+    networks:
+            - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus-luca.yml:/etc/prometheus/prometheus-luca.yml
+    networks:
+      - monitoring
+
+
+  grafana:
+     image: grafana/grafana
+     ports:
+       - 3000:3000
+     environment:
+       - GF_SECURITY_ADMIN_USER=MyLittleEdi3978
+       - GF_SECURITY_ADMIN_PASSWORD=HappyHippo
+     networks:
+       - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
+    #external: true - bringt nur was wenn man schon ein
+    #passendes netzwerk hat. auskommentiert erstellt er ein
+    #neues netztwerk

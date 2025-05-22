@@ -38,4 +38,4 @@ networks:
     #passendes netzwerk hat. auskommentiert erstellt er ein
     #neues netztwerk
 
-    #docker compose -f docker-compose.luca.yml up --build
+    #docker compose -f docker-compose-luca.yml up --build

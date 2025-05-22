@@ -2,14 +2,14 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements-luca.txt .
+RUN pip install --no-cache-dir -r requirements-luca.txt
 
 COPY export-luca.py .
 
 EXPOSE 9110
 
-CMD ["python", "export.py"]
+CMD ["python", "export-luca.py"]
 
 # Start with a lightweight base image
 #FROM alpine:latest

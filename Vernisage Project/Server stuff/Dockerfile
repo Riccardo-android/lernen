@@ -16,6 +16,15 @@ EXPOSE 9110
 
 CMD ["python", "export.py"]
 
+
+#FROM node:latest
+#WORKDIR /app
+#COPY package.json ./
+#RUN npm install
+#COPY . .
+#EXPOSE 3001
+#CMD [ "node", "index.js"]
+
 # Start with a lightweight base image
 #FROM alpine:latest
 

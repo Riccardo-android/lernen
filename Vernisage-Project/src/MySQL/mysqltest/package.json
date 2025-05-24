@@ -1,0 +1,16 @@
+{
+  "name": "mysqltest",
+  "version": "1.0.0",
+  "description": "node.js test",
+  "main": "index.js",
+  "scripts": {
+   "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mysql": "^2.18.1"
+  }
+}

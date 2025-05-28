@@ -51,7 +51,7 @@ def filldatabase():
     Jahr = [(float(k[15]),) for k in array5]
     array6 = list(zip(id, Bzeit,source, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug,Sep, Oct, Nov, Dec, Jahr))
 
-    cur.executemany('INSERT INTO  avg_temp_ger_all_stations (Stations_id, Bezugszeitraum, Datenquelle, Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr) '
+    cur.executemany('INSERT INTO  avg_temp_ger_all_stations (Stations_id, Zeitraum, Datenquelle, Januar, Februar, Marz, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr) '
                     'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE Stations_id = Stations_id',array6)
 
 
@@ -77,12 +77,36 @@ getcells(array)
 addZero(array2)
 #print(array4)
 
-
+create_db = "CREATE DATABASE IF NOT EXISTS hist_ger_9020"
+with database.cursor() as cursor:
+    cursor.execute(create_db)
 #connecte mit existierender Datenbank
 con = pymysql.connect(host = '127.0.0.1', user = 'root', passwd = 'Pr!m4bAl13rina', db = 'hist_ger_9020', port = 3307)
-
-#
 cur = con.cursor()
+TABLES = {}
+#Stations_id, Bezugszeitraum, Datenquelle, Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr
+TABLES['hist_ger_9020'] = ("CREATE TABLE IF NOT EXISTS avg_temp_ger_all_stations ("
+                                       "`Stations_ID` int NOT NULL AUTO_INCREMENT," 
+                                       "`Zeitraum` char(9) NOT NULL," 
+                                       "`Datenquelle` int NOT NULL," 
+                                       "`Januar` float NOT NULL," 
+                                       "`Februar` float NOT NULL," 
+                                       "`Marz` float NOT NULL," 
+                                       "`April` float NOT NULL," 
+                                       "`Mai` float NOT NULL," 
+                                       "`Juni` float NOT NULL," 
+                                       "`Juli` float NOT NULL," 
+                                       "`August` float NOT NULL," 
+                                       "`September` float NOT NULL," 
+                                       "`Oktober` float NOT NULL," 
+                                       "`November` float NOT NULL," 
+                                       "`Dezember` float NOT NULL," 
+                                       "`avg_Jahr` float NOT NULL,"
+                                       "PRIMARY KEY (`Stations_ID`)"
+                                       ") ENGINE=InnoDB")
+
+
+cur.execute(TABLES['hist_ger_9020'])
 filldatabase()
 con.commit()
 con.close()
@@ -95,4 +119,4 @@ print(array2)
 #for x in array:
  #print(x)
 """
-
+3

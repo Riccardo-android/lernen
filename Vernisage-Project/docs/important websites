@@ -10,3 +10,6 @@ https://www.bytebase.com/reference/mysql/how-to/top-mysql-commands-with-examples
 
 CREATE TABLES in mysql
 https://dev.mysql.com/doc/refman/8.4/en/creating-tables.html
+
+Pymysql docu
+https://pymysql.readthedocs.io/en/latest/user/examples.html

@@ -1,6 +1,22 @@
-from getpass import getpass
-from mysql.connector import connect, Error
+#from getpass import getpass
+#from mysql.connector import connect, Error
 
+import requests
+import pymysql
+
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Temperatur_1991-2020.txt"
+
+print(url)
+
+
+
+
+
+
+
+
+
+"""
 try:
     with connect(
         host="localhost",
@@ -19,7 +35,7 @@ try:
 
 except Error as e:
     print(e)
-
+"""
 
 
 

@@ -5,3 +5,8 @@ https://documentation.ubuntu.com/server/how-to/databases/install-mysql/index.htm
 MYSQL with docker
 https://www.datacamp.com/tutorial/set-up-and-configure-mysql-in-docker
 
+MYSQL commands
+https://www.bytebase.com/reference/mysql/how-to/top-mysql-commands-with-examples/
+
+CREATE TABLES in mysql
+https://dev.mysql.com/doc/refman/8.4/en/creating-tables.html

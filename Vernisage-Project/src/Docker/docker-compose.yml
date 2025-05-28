@@ -3,8 +3,11 @@ services:
 
   db:
     image: mysql
-    ports: ['3307:3307']
+    container_name: MYSQL
+    ports: ['3307:3306']
     environment:
+      MYSQL_ROOT_PASSWORD: Pr!m4bAl13rina
+      MYSQL_DATABASE: hist_ger_9020
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     healthcheck:
@@ -16,6 +19,7 @@ services:
 
 
   dwd-exporter:
+    container_name: DWD-exporter
     #build: "../../src/Docker"
     build:
       context: "../../"
@@ -28,6 +32,7 @@ services:
 
   prometheus:
     image: prom/prometheus
+    container_name: Prometheus
     ports:
       - 9090:9090
     volumes:
@@ -38,6 +43,7 @@ services:
 
   grafana:
      image: grafana/grafana
+     container_name: Grafana
      ports:
        - 3000:3000
      environment:
@@ -49,5 +55,4 @@ services:
 networks:
   monitoring:
     driver: bridge
-    #external: true - bringt nur was wenn man schon ein passendes netzwerk hat. auskommentiert erstellt er ein neues netztwerk
-
+    #external: true - bringt nur was wenn man schon ein passendes netzwerk hat. auskommentiert erstellt e

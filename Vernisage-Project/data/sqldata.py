@@ -90,7 +90,7 @@ addZero(array2)
 DB_NAME = 'hist_temp_ger'
 time.sleep(10)
 try:
-    cnx = mysql.connector.connect(user='root', password='Pr!m4bAl13rina', host=os.environ.get("MYSQL_HOST", "db"), port= int(os.environ.get("MYSQL_PORT", 3306)))
+    cnx = mysql.connector.connect(user='root', password='Pr!m4bAl13rina', host="db", port=3306)
     cursor = cnx.cursor()
     try:
         cursor.execute("USE {}".format(DB_NAME))

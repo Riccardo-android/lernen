@@ -19,7 +19,7 @@ services:
       timeout: 5s
       retries: 55
     networks:
-      - bank
+      - monitoring
 
   python:
     image: pythonscript
@@ -31,7 +31,7 @@ services:
       db:
         condition: service_healthy
     networks:
-       - bank
+       - monitoring
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306

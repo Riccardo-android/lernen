@@ -1,6 +1,8 @@
+import os
+
 import requests
-import pymysql
 import mysql.connector
+import time
 from mysql.connector import errorcode
 from sympy.solvers.ode.single import SeparableReduced
 
@@ -35,7 +37,7 @@ def create_database(cursor):
          cursor.execute("CREATE DATABASE IF NOT EXISTS {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
     except mysql.connector.Error as err:
         print("Failed to create database: {}".format(err))
-        exit(1)
+        exit(2)
 
 def filldatabase():
     array5 = array4
@@ -86,8 +88,9 @@ getcells(array)
 addZero(array2)
 #print(array4)
 DB_NAME = 'hist_temp_ger'
+time.sleep(10)
 try:
-    cnx = mysql.connector.connect(user='root', password='Pr!m4bAl13rina', host='127.0.0.1', port= 3307)
+    cnx = mysql.connector.connect(user='root', password='Pr!m4bAl13rina', host=os.environ.get("MYSQL_HOST", "db"), port= int(os.environ.get("MYSQL_PORT", 3306)))
     cursor = cnx.cursor()
     try:
         cursor.execute("USE {}".format(DB_NAME))
@@ -102,7 +105,7 @@ try:
             exit(1)
 except mysql.connector.Error as err:
     print("Failed to create database: {}".format(err))
-    exit(1)
+    exit(3)
 
 TABLES = {}
 avgtemp = """CREATE TABLE IF NOT EXISTS avg_temp_ger_9020 (

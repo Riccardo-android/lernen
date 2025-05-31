@@ -16,3 +16,10 @@ https://pymysql.readthedocs.io/en/latest/user/examples.html
 
 Exit Codes Docker Compose
 https://komodor.com/learn/exit-codes-in-containers-and-kubernetes-the-complete-guide/
+
+Sachen die noch in die Datenbank müssen:
+"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Temperatur_1961-1990.txt"
+
+Eistage, Frosttage, Heissetage, Niederschlag, Sommertage, Sonnenscheindauer mit jeweiliger Stationsliste.
+https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/
+https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/

@@ -1,7 +1,14 @@
+# Wetterdienst-Client für den Zugriff auf Wetterdaten von verschiedenen Diensten
 wetterdienst @ git+https://github.com/earthobservations/wetterdienst@7ec770929b5fbe538e413af1d9767c5888310eaf
+# MySQL Connector für Python - ermöglicht die Verbindung zu MySQL-Datenbanken
 mysql-connector-python==9.3.0
+# HTTP-Bibliothek für Python - vereinfacht HTTP-Anfragen
 requests==2.32.3
+# Tool zum Importieren von SSH-Schlüsseln
 ssh-import-id==5.10
+# Debugging-Tool für bessere Darstellung von Stack Traces
 stack-data==0.6.3
+# Bibliothek für Retry-Mechanismen und Fehlerbehandlung
 stamina==24.3.0
+# Bibliothek für symbolische Mathematik
 sympy==1.13.3

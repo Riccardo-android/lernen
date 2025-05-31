@@ -1,85 +1,86 @@
 version: '3'
 services:
 
+  # MySQL Datenbank Service
   db:
-    image: mysql:latest
-    restart: always
-    container_name: MYSQL
-    environment:
+    image: mysql:latest              # Verwendet das offizielle MySQL Image
+    restart: always                  # Startet den Container automatisch neu
+    container_name: MYSQL           
+    environment:                     # Umgebungsvariablen für MySQL Setup
       MYSQL_ROOT_PASSWORD: Pr!m4bAl13rina
-      MYSQL_DATABASE: hist_temp_ger
-      MYSQL_USER: myuser
+      MYSQL_DATABASE: hist_temp_ger  # Erstellt eine neue Datenbank
+      MYSQL_USER: myuser            # Erstellt einen neuen Benutzer
       MYSQL_PASSWORD: mypassword
-    ports: ['3307:3306']
-    healthcheck:
-      #test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"
+    ports: ['3307:3306']            # Port-Mapping: Host-Port 3307 zu Container-Port 3306
+    healthcheck:                     # Überprüft die Gesundheit des Containers
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p Pr!m4bAl13rina"]
-      start_period: 5s
-      interval: 5s
-      timeout: 5s
-      retries: 55
+      start_period: 5s              # Wartezeit vor dem ersten Check
+      interval: 5s                  # Intervall zwischen den Checks
+      timeout: 5s                   # Timeout für jeden Check
+      retries: 55                   # Anzahl der Wiederholungsversuche
     networks:
-      - monitoring
+      - monitoring                  # Verbindet mit dem monitoring Netzwerk
 
+  # Python Service für Datenverarbeitung
   python:
-    image: pythonscript
+    image: pythonscript            # Verwendet ein custom Python Image
     container_name: PYTHON
     build:
-      context: ../..
+      context: ../..               # Build-Kontext für das Dockerfile
       dockerfile: data/Dockerfile
-    depends_on:
+    depends_on:                    # Wartet auf den MySQL Service
       db:
         condition: service_healthy
     networks:
-       - monitoring
-    environment:
+      - monitoring
+    environment:                   # MySQL Verbindungseinstellungen
       MYSQL_HOST: db
       MYSQL_PORT: 3306
-    healthcheck:
-    #test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"
+    healthcheck:                   # Ähnliche Healthcheck-Konfiguration wie bei MySQL
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p Pr!m4bAl13rina" ]
       start_period: 5s
       interval: 5s
       timeout: 5s
       retries: 55
 
-
+  # DWD Exporter Service
   dwd-exporter:
     container_name: DWD-exporter
     build:
       context: ../..
       dockerfile: src/Docker/Dockerfile
     ports:
-            - "9110:9110"
-    restart: unless-stopped
+      - "9110:9110"               # Exponiert Port 9110
+    restart: unless-stopped        # Neustart bei Fehlern, außer bei manuellem Stop
     networks:
-            - monitoring
+      - monitoring
 
+  # Prometheus Monitoring Service
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus        # Offizielles Prometheus Image
     container_name: Prometheus
     ports:
-      - 9090:9090
-    volumes:
+      - 9090:9090               # Standard Prometheus Port
+    volumes:                     # Bindet die Konfigurationsdatei ein
       - ../Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitoring
 
-
+  # Grafana Visualisierungs-Service
   grafana:
-     image: grafana/grafana
+     image: grafana/grafana      # Offizielles Grafana Image
      container_name: Grafana
      ports:
-       - 3000:3000
-     environment:
+       - 3000:3000              # Standard Grafana Web-Interface Port
+     environment:               # Admin Zugangsdaten für Grafana
        - GF_SECURITY_ADMIN_USER=MyLittleEdi3978
        - GF_SECURITY_ADMIN_PASSWORD=HappyHippo
      networks:
        - monitoring
 
+# Netzwerk-Konfiguration
 networks:
-  monitoring:
-    driver: bridge
-  bank:
-    driver: bridge
-    #external: true - bringt nur was wenn man schon ein passendes netzwerk hat. auskommentiert erstellt e
+  monitoring:                    # Hauptnetzwerk für alle Services
+    driver: bridge              # Verwendet den Bridge-Netzwerk-Treiber
+
+    #external: true            # Auskommentiert, da kein externes Netzwerk verwendet wird

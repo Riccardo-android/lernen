@@ -48,7 +48,7 @@ def filldatabase(array4, array7, cnx, TABLE_NAME):
     del array5[len(array5) - 1]
     del array7[0]
     del array7[len(array7) - 1]
-    #print(array5)
+    print(array7)
     for i in range(len(array5)):
         for j in range(len(array7)):
             if array5[i][0] == array7[j][0]:
@@ -110,7 +110,7 @@ def getdata(url, urlsname, DB_NAME, TABLE_NAME):
         try:
             cursor.execute("USE {}".format(DB_NAME))
         except mysql.connector.Error as err:
-            print("Failed to create database: {}".format(err))
+            print("Failed to use database: {}".format(err))
             if err.errno == errorcode.ER_BAD_DB_ERROR:
                 create_database(cursor)
                 print("Database {} created successfully".format(DB_NAME))
@@ -152,14 +152,70 @@ def getdata(url, urlsname, DB_NAME, TABLE_NAME):
         filldatabase(array4, array7, cnx, TABLE_NAME)
         cnx.commit()
         cnx.close()
-
-
+        array4.clear()
+        array7.clear()
 
 #connect with DWD API
-url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Temperatur_1991-2020.txt"
-urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Temperatur_1991-2020_Stationsliste.txt"
 DB_NAME = "hist_climate_ger"
 TABLE_NAME = "avg_temp_ger_6120"
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Temperatur_1991-2020.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Temperatur_1991-2020_Stationsliste.txt"
 getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
 url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Temperatur_1961-1990.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Temperatur_1961-1990_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+TABLE_NAME = "Eistage_ger_6120"
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Eistage_1991-2020.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Eistage_1991-2020_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Eistage_1961-1990.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Eistage_1961-1990_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+TABLE_NAME = "Frosttage_ger_6120"
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Frosttage_1991-2020.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Frosttage_1991-2020_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Frosttage_1961-1990.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Frosttage_1961-1990_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+TABLE_NAME = "Heissetage_ger_6120"
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Heissetage_1991-2020.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Heissetage_1991-2020_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Heissetage_1961-1990.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Heissetage_1961-1990_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+TABLE_NAME = "Niederschlag_ger_6120"
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Niederschlag_1991-2020.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Niederschlag_1991-2020_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Niederschlag_1961-1990.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Niederschlag_1961-1990_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+TABLE_NAME = "Sommertage_ger_6120"
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Sommertage_1991-2020.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Sommertage_1991-2020_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Sommertage_1961-1990.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Sommertage_1961-1990_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+TABLE_NAME = "Sonnenscheindauer_ger_6120"
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Sonnenscheindauer_1991-2020.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_91-20/Sonnenscheindauer_1991-2020_Stationsliste.txt"
+getdata(url, urlsname, DB_NAME, TABLE_NAME)
+
+url = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Sonnenscheindauer_1961-1990.txt"
+urlsname = "https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/multi_annual/mean_61-90/Sonnenscheindauer_1961-1990_Stationsliste.txt"
 getdata(url, urlsname, DB_NAME, TABLE_NAME)

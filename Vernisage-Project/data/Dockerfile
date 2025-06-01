@@ -10,6 +10,7 @@ COPY data/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Kopiere die Hauptanwendungsdatei in den Container
+COPY data/sqldatadef.py .
 COPY data/sqldata.py .
 
 # Definiere den Port, der vom Container freigegeben wird

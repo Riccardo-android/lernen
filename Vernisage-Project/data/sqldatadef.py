@@ -36,7 +36,7 @@ def addZero(results, array4):
         array4.append(array3)
     return array4
 
-def create_database(cursor):
+def create_database(cursor, DB_NAME):
     try:
          cursor.execute("CREATE DATABASE IF NOT EXISTS {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
     except mysql.connector.Error as err:
@@ -121,7 +121,7 @@ def getdata(url, urlsname, DB_NAME, TABLE_NAME):
         except mysql.connector.Error as err:
             print("Failed to use database: {}".format(err))
             if err.errno == errorcode.ER_BAD_DB_ERROR:
-                create_database(cursor)
+                create_database(cursor, DB_NAME)
                 print("Database {} created successfully".format(DB_NAME))
                 cnx.database = DB_NAME
             else:
@@ -160,9 +160,8 @@ def getdata(url, urlsname, DB_NAME, TABLE_NAME):
     with cnx.cursor() as cursor:
         cursor.execute(avgtemp)
         cnx.commit()
-
-    filldatabase(array4, array7, cnx, TABLE_NAME)
-
-    cnx.close()
+        filldatabase(array4, array7, cnx, TABLE_NAME)
+        cnx.commit()
+        cnx.close()
     array4.clear()
     array7.clear()

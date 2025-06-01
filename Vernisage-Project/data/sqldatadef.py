@@ -14,10 +14,8 @@ def getlines(filename, results):
 
 def getcells(results, array2):
     for i in results:
-        #i = i.replace(" ","")
         cells = i.split(sep=";")
         array2.append(cells)
-        #array2 = [item.replace(" .", "0.") for item in cells]
     return array2
 
 def addZero(results, array4):
@@ -27,23 +25,24 @@ def addZero(results, array4):
            new_i = str(results[i][j])
            new_i = new_i.replace(" .", "0.")
            new_i = new_i.replace("-.", "-0.")
-           #new_i = new_i.replace("ä", "ae")
-           #new_i = new_i.replace("ö", "oe") - funktioniern alle 3 noch nicht.
-           #new_i = new_i.replace("ü", "ue")
+           new_i = new_i.replace("ä", "ae")
+           new_i = new_i.replace("ö", "oe")
+           new_i = new_i.replace("ü", "ue")
+           new_i = new_i.replace("ß", "ss")
            new_i = new_i.replace(" ", "")
            array3.append(new_i)
         array3.pop()
         array4.append(array3)
     return array4
 
-def create_database(cursor, DB_NAME):
+def create_database(cursor, db_name):
     try:
-         cursor.execute("CREATE DATABASE IF NOT EXISTS {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
+         cursor.execute("CREATE DATABASE IF NOT EXISTS {} DEFAULT CHARACTER SET 'utf8'".format(db_name))
     except mysql.connector.Error as err:
         print("Failed to create database: {}".format(err))
         exit(2)
 
-def filldatabase(array4, array7, cnx, TABLE_NAME):
+def filldatabase(array4, array7, cnx, table_name):
     array5 = array4
     del array5[0]
     del array5[len(array5) - 1]
@@ -89,41 +88,22 @@ def filldatabase(array4, array7, cnx, TABLE_NAME):
     array6 = list(zip(id, ort, bland, bzzeit,source, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug,Sep, Oct, Nov, Dec, Jahr, slati, slongi, sheight))
 
     with cnx.cursor() as cursor:
-        cursor.executemany('INSERT INTO ' + TABLE_NAME + '  (Stations_id, Stationsname, Bundesland, Zeitraum, Datenquelle, Januar, Februar, Marz, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr, latitude, longitude, Stationshoehe) '
+        cursor.executemany('INSERT INTO ' + table_name + '  (Stations_id, Stationsname, Bundesland, Zeitraum, Datenquelle, Januar, Februar, Marz, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr, latitude, longitude, Stationshoehe) '
                     'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE Stations_id = Stations_id',array6)
 
-
-def getdata(url, urlsname, DB_NAME, TABLE_NAME):
-    response = requests.get(url)
-    file = response.text
-    array = []
-    array2 = []
-    array4 = []
-    array7 = []
-
-    getlines(file, array)
-    getcells(array, array2)
-    addZero(array2, array4)
-    array.clear()
-    array2.clear()
-
-    response = requests.get(urlsname)
-    file = response.text
-    getlines(file, array)
-    getcells(array, array2)
-    addZero(array2, array7)
-
+def database(db_name):
+    global cnx, cursor
     try:
         cnx = mysql.connector.connect(user='root', password='Pr!m4bAl13rina', host="db", port=3306)
         cursor = cnx.cursor()
         try:
-            cursor.execute("USE {}".format(DB_NAME))
+            cursor.execute("USE {}".format(db_name))
         except mysql.connector.Error as err:
             print("Failed to use database: {}".format(err))
             if err.errno == errorcode.ER_BAD_DB_ERROR:
-                create_database(cursor, DB_NAME)
-                print("Database {} created successfully".format(DB_NAME))
-                cnx.database = DB_NAME
+                create_database(cursor, db_name)
+                print("Database {} created successfully".format(db_name))
+                cnx.database = db_name
             else:
                 print(err)
                 exit(1)
@@ -131,8 +111,9 @@ def getdata(url, urlsname, DB_NAME, TABLE_NAME):
         print("Failed to create database: {}".format(err))
         exit(3)
 
-    TABLES = {}
-    avgtemp = """CREATE TABLE IF NOT EXISTS """ + TABLE_NAME + """ (
+def tables(table_name):
+    global createtable
+    createtable = """CREATE TABLE IF NOT EXISTS """ + table_name + """ (
                                        `Stations_ID` int NOT NULL AUTO_INCREMENT,
                                        `Stationsname` varchar(255) NOT NULL,
                                        `Bundesland` varchar(255) NOT NULL, 
@@ -157,10 +138,34 @@ def getdata(url, urlsname, DB_NAME, TABLE_NAME):
                                        PRIMARY KEY (`Stations_ID`,`Stationsname`,`Zeitraum`)
                                        ) ENGINE=InnoDB
                                        """
+
+def getdata(url, urlsname, db_name, table_name):
+    response = requests.get(url)
+    file = response.text
+    array = []
+    array2 = []
+    array4 = []
+    array7 = []
+
+    getlines(file, array)
+    getcells(array, array2)
+    addZero(array2, array4)
+    array.clear()
+    array2.clear()
+
+    response = requests.get(urlsname)
+    file = response.text
+    getlines(file, array)
+    getcells(array, array2)
+    addZero(array2, array7)
+
+    database(db_name)
+    tables(table_name)
+
     with cnx.cursor() as cursor:
-        cursor.execute(avgtemp)
+        cursor.execute(createtable)
         cnx.commit()
-        filldatabase(array4, array7, cnx, TABLE_NAME)
+        filldatabase(array4, array7, cnx, table_name)
         cnx.commit()
         cnx.close()
     array4.clear()

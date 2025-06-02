@@ -1,0 +1,55 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 3,
+  "links": [],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 17,
+        "w": 23,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "libraryPanel": {
+        "name": "Deutschland Wetterdaten ",
+        "uid": "aenqok5bckl4we"
+      },
+      "title": "Deutschland Wetterdaten ",
+      "type": "library-panel-ref"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Wetterdaten von Deutschland auf einer Geografischen karte",
+  "uid": "fe68173f-cbe7-4e5e-8413-b61becbf2e02",
+  "version": 40
+}

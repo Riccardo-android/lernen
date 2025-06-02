@@ -1,0 +1,130 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 5,
+  "links": [],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "libraryPanel": {
+        "name": "Durchschnittlichen Heißtage von Mai - September  in München von 1961-2020",
+        "uid": "aenqomz5u14owf"
+      },
+      "title": "Durchschnittlichen Heißtage von Mai - September  in München von 1961-2020",
+      "type": "library-panel-ref"
+    },
+    {
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "libraryPanel": {
+        "name": "Durchschnittlichen Sommertage von April - Oktober in München von 1961-2020",
+        "uid": "benqonq1f76kgc"
+      },
+      "title": "Durchschnittlichen Sommertage von April - Oktober in München von 1961-2020",
+      "type": "library-panel-ref"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 6,
+      "libraryPanel": {
+        "name": "Durschnittliche Sonnenscheindauer von Januar - Dezember in München von 19961-2020",
+        "uid": "fenqopfdrfjlsd"
+      },
+      "title": "Durschnittliche Sonnenscheindauer von Januar - Dezember in München von 19961-2020",
+      "type": "library-panel-ref"
+    },
+    {
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 1,
+      "libraryPanel": {
+        "name": "Durchschnittlichen Eistage von Janaur - März und November & Dezember in München von 1961-2020",
+        "uid": "eenqoo7k12d4wf"
+      },
+      "title": "Durchschnittlichen Eistage von Janaur - März und November & Dezember in München von 1961-2020",
+      "type": "library-panel-ref"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 5,
+      "libraryPanel": {
+        "name": "Durchschnittsanzahl der Niederschlagstage von Januar - Dezember von 1961-2020 von München",
+        "uid": "fenqop3ult2psb"
+      },
+      "title": "Durchschnittsanzahl der Niederschlagstage von Januar - Dezember von 1961-2020 von München",
+      "type": "library-panel-ref"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
+      "id": 2,
+      "libraryPanel": {
+        "name": "Durchschnittlichen Frosttage von Januar - April und November & Dezember in München von 1961-2020",
+        "uid": "cenqooj2u7caoa"
+      },
+      "title": "Durchschnittlichen Frosttage von Januar - April und November & Dezember in München von 1961-2020",
+      "type": "library-panel-ref"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Untersuchung verschiedener Wetterkriterien in München von 1961-2020",
+  "uid": "919badef-6ae3-457a-994f-f9936f354178",
+  "version": 2
+}

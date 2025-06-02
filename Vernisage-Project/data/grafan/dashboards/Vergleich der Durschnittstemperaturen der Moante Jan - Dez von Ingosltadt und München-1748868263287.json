@@ -1,0 +1,70 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 4,
+  "links": [],
+  "panels": [
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "libraryPanel": {
+        "name": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in München",
+        "uid": "denqomhvwb9c0c"
+      },
+      "title": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in München",
+      "type": "library-panel-ref"
+    },
+    {
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "libraryPanel": {
+        "name": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in Ingolstadt",
+        "uid": "denqom6r63ocgd"
+      },
+      "title": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in Ingolstadt",
+      "type": "library-panel-ref"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Vergleich der Durschnittstemperaturen der Moante Jan - Dez von Ingosltadt und München",
+  "uid": "2568692a-b528-4833-9cb8-15dd47575411",
+  "version": 5
+}

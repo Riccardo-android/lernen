@@ -1,5 +1,7 @@
 import sqldatadef
+import histflive
 
+histflive.usehistflive()
 
 DB_NAME = "hist_climate_ger"
 TABLE_NAME = "avg_temp_ger_6120"

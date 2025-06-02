@@ -20,4 +20,3 @@ EXPOSE 3307
 
 # Starte die Python-Anwendung
 CMD ["python", "sqldata.py"]
-CMD ["python", "histflive.py"]

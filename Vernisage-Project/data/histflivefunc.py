@@ -123,7 +123,7 @@ def filltable(array4, array7, array8, city_name):
             array5[i].append('0.0')  # oder '' als Platzhalter
 
 
-    zeitraum = array5[1][0] + "-" + array5[-1][0]
+    zeitraum = array5[0][0] + "-" + array5[-1][0]
     array10 = [zeitraum, jahr]
     for i in range(1, len(array5[0])-1):
         summ = 0.0
@@ -136,7 +136,6 @@ def filltable(array4, array7, array8, city_name):
                 continue
         array10.insert(i, summ / k if k > 0 else 0.0)
     array5.append(array10)
-    #print(array8)
     for i in range(len(array5)):
         for j in range(len(array8)):
             if array8[j][0] == city_name:
@@ -212,20 +211,3 @@ def getdata(urlhist, urlrec, urlstation, db_name, table_name, city_name):
     array4.clear()
     array7.clear()
     array8.clear()
-
-
-"""   for i in range(len(array5)):
-        sum = 0.0
-        k = 0
-        print(len(array5[0]))
-        for j in range(1,len(array5[0])-1):
-            print(array5)
-            sum = float(array5[i][j]) + sum
-            if array5[i][j] == 0.0:
-                k = k
-            else:
-                k += 1
-        jahr = sum / k
-        #print(array5[i][0])
-        array5[i].append(jahr)
-  """

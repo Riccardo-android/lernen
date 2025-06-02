@@ -1,7 +1,7 @@
 version: '3'
 services:
 
-  # MySQL Datenbank Service
+  # MySQL Datenbank
   db:
     image: mysql:latest              # Verwendet das offizielle MySQL Image
     restart: always                  # Startet den Container automatisch neu
@@ -21,7 +21,7 @@ services:
     networks:
       - monitoring                  # Verbindet mit dem monitoring Netzwerk
 
-  # Python Service für Datenverarbeitung
+  # Datenverarbeitung
   python:
     image: pythonscript            # Verwendet ein custom Python Image
     container_name: PYTHON
@@ -43,19 +43,26 @@ services:
       timeout: 5s
       retries: 55
 
-  # DWD Exporter Service
-  dwd-exporter:
-    container_name: DWD-exporter
+  openmeteo-exporter:
+    image: openmeteo
+    container_name: Openmeteo
     build:
       context: ../..
       dockerfile: src/Docker/Dockerfile
     ports:
-      - "9110:9110"               # Exponiert Port 9110
-    restart: unless-stopped        # Neustart bei Fehlern, außer bei manuellem Stop
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on: # Wartet auf den MySQL Service
+      db:
+        condition: service_healthy
+
     networks:
       - monitoring
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
 
-  # Prometheus Monitoring Service
+  # Prometheus
   prometheus:
     image: prom/prometheus        # Offizielles Prometheus Image
     container_name: Prometheus
@@ -66,7 +73,7 @@ services:
     networks:
       - monitoring
 
-  # Grafana Visualisierungs-Service
+  # Grafana
   grafana:
      image: grafana/grafana      # Offizielles Grafana Image
      container_name: Grafana

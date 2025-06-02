@@ -1,4 +1,4 @@
-FROM alpine:3.13
+FROM alpine:3.13 as tools
 
 # Wenn ein anderes Image auf diesem basiert, wird coreutils dann installiert
 RUN apk add --no-cache coreutils
@@ -12,11 +12,12 @@ COPY ../../requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 #COPY ../../data/export.py .
-COPY data/export.py .
+COPY data/livedata.py .
+COPY data/sqldatadef.py .
 
 EXPOSE 9110
 
-CMD ["python", "export.py"]
+CMD ["python", "livedata.py"]
 
 
 #FROM node:latest

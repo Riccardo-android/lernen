@@ -4,11 +4,12 @@ import mysql.connector
 import time
 
 from mysql.connector import errorcode
+from polars.testing.parametric import column
 from sympy.solvers.ode.single import SeparableReduced
 
 
-def getlines(filename, results):
-   line = filename.split(sep="\r\n")
+def getlines(filename, results, sign="\r\n"):
+   line = filename.split(sep=sign)
    results.extend(line)
    return(results)
 
@@ -31,7 +32,8 @@ def addZero(results, array4):
            new_i = new_i.replace("ß", "ss")
            new_i = new_i.replace(" ", "")
            array3.append(new_i)
-        array3.pop()
+        if array3 and array3[-1].strip() == '':
+            array3.pop()
         array4.append(array3)
     return array4
 
@@ -42,12 +44,15 @@ def create_database(cursor, db_name):
         print("Failed to create database: {}".format(err))
         exit(2)
 
-def filldatabase(array4, array7, cnx, table_name):
-    array5 = array4
-    del array5[0]
-    del array5[len(array5) - 1]
-    del array7[0]
-    del array7[len(array7) - 1]
+def adjhistdata(array4, array7):
+    global array5
+    array5 = array4[:]
+    if len(array5) > 1:
+        del array5[0]
+        del array5[-1]
+    if len(array7) > 1:
+       del array7[0]
+       del array7[-1]
     for i in range(len(array5)):
         for j in range(len(array7)):
             if array5[i][0] == array7[j][0]:
@@ -64,11 +69,12 @@ def filldatabase(array4, array7, cnx, table_name):
             array5[i].append(0)
             array5[i].append(100000)
 
-    id = [int(k[0]) for k in array5]
+def filldatabase(array5, cnx, table_name):
+    id = [int(float(k[0])) for k in array5]
     ort = [str(k[1]) for k in array5]
     bland = [str(k[2]) for k in array5]
     bzzeit = [str(k[3]) for k in array5]
-    source = [int(k[4]) for k in array5]
+    source = [int(float(k[4])) for k in array5]
     Jan = [float(k[5]) for k in array5]
     Feb = [float(k[6]) for k in array5]
     Mar = [float(k[7]) for k in array5]
@@ -88,7 +94,7 @@ def filldatabase(array4, array7, cnx, table_name):
     array6 = list(zip(id, ort, bland, bzzeit,source, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug,Sep, Oct, Nov, Dec, Jahr, slati, slongi, sheight))
 
     with cnx.cursor() as cursor:
-        cursor.executemany('INSERT INTO ' + table_name + '  (Stations_id, Stationsname, Bundesland, Zeitraum, Datenquelle, Januar, Februar, Marz, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr, latitude, longitude, Stationshoehe) '
+        cursor.executemany('INSERT INTO ' + table_name + '  (Stations_id, Stationsname, Land, Zeitraum, Datenquelle, Januar, Februar, Marz, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr, latitude, longitude, Stationshoehe) '
                     'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE Stations_id = Stations_id',array6)
 
 def database(db_name):
@@ -116,7 +122,7 @@ def tables(table_name):
     createtable = """CREATE TABLE IF NOT EXISTS """ + table_name + """ (
                                        `Stations_ID` int NOT NULL AUTO_INCREMENT,
                                        `Stationsname` varchar(255) NOT NULL,
-                                       `Bundesland` varchar(255) NOT NULL, 
+                                       `Land` varchar(255) NOT NULL, 
                                        `Zeitraum` varchar(255) NOT NULL, 
                                        `Datenquelle` int NOT NULL, 
                                        `Januar` float NOT NULL, 
@@ -138,6 +144,36 @@ def tables(table_name):
                                        PRIMARY KEY (`Stations_ID`,`Stationsname`,`Zeitraum`)
                                        ) ENGINE=InnoDB
                                        """
+
+def dyncolnam(array4, array7):
+
+    columns = array4[0]
+
+    definition = []
+    for i, column in enumerate(columns):
+        if i == 0:
+            definition.append(f"`{column}` int NOT NULL AUTO_INCREMENT")
+        else:
+            definition.append(f"`{column}` float NOT NULL")
+
+    primary  = columns[0]
+
+    createtable = f"""CREATE TABLE IF NOT EXISTS {table_name} (
+                                       {',\n'.join(definition)},
+                                       PRIMARY KEY (`{primary}`)
+                                       ) ENGINE=InnoDB
+                                       """
+
+
+
+def is_number(s):
+    try:
+        float(s) # für Float- und Int-Werte
+        return True
+    except ValueError:
+        return False
+
+
 
 def getdata(url, urlsname, db_name, table_name):
     response = requests.get(url)
@@ -165,7 +201,11 @@ def getdata(url, urlsname, db_name, table_name):
     with cnx.cursor() as cursor:
         cursor.execute(createtable)
         cnx.commit()
-        filldatabase(array4, array7, cnx, table_name)
+
+    adjhistdata(array4, array7)
+
+    with cnx.cursor() as cursor:
+        filldatabase(array5, cnx, table_name)
         cnx.commit()
         cnx.close()
     array4.clear()

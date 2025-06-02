@@ -12,9 +12,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Kopiere die Hauptanwendungsdatei in den Container
 COPY data/sqldatadef.py .
 COPY data/sqldata.py .
+COPY data/histflive.py .
+COPY data/histflivefunc.py .
 
 # Definiere den Port, der vom Container freigegeben wird
 EXPOSE 3307
 
 # Starte die Python-Anwendung
 CMD ["python", "sqldata.py"]
+CMD ["python", "histflive.py"]

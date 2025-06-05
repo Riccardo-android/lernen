@@ -9,7 +9,7 @@ WORKDIR /app
 COPY data/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopiere die Hauptanwendungsdatei in den Container
+# Kopieren uns die Python scripts auf den Container die in diesem verwendet werden
 COPY data/sqldatadef.py .
 COPY data/sqldata.py .
 COPY data/histflive.py .

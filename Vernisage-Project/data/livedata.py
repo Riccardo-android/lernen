@@ -28,9 +28,6 @@ locations = [
     {"name": "Brocken", "lat": 51.7996, "lon": 10.6190},
     {"name": "Itzehoe", "lat": 53.9210, "lon": 9.5176}, #zusätzliche Stadt kann hinzugefügt werden
 ]
-#sqlite3 db setup
-#cnx = mysql.connector.connect(host="db", port=3306, user="root", passwd="Pr!m4bAl13rina")
-#cursor = cnx.cursor()
 
 
 createtable = """CREATE TABLE IF NOT EXISTS livedata (

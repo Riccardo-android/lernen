@@ -7,18 +7,20 @@ from mysql.connector import errorcode
 from polars.testing.parametric import column
 from sympy.solvers.ode.single import SeparableReduced
 
-
+#teilen der textdatei in Zeilen. Jedes Element ist eine Zeile der txt datei
 def getlines(filename, results, sign="\r\n"):
    line = filename.split(sep=sign)
    results.extend(line)
    return(results)
 
+#Aufteilen der jeweiligen Zeilen in die einzelnen Daten
 def getcells(results, array2):
     for i in results:
         cells = i.split(sep=";")
         array2.append(cells)
     return array2
 
+#Anpassen der Daten um mögliche Probleme zu umgehen
 def addZero(results, array4):
     for i in range(len(results)):
         array3 = []
@@ -37,6 +39,8 @@ def addZero(results, array4):
         array4.append(array3)
     return array4
 
+#wird nur aufgerufen falls die Datenbank noch nicht existiert. Zur Sicherheit wird es aber auch hier nochmal überprüft
+#Falls die Verbindung zur MYSQL Datenbank fehlschlägt bekommen wir einen Error. mit Errorcode 2 um besser zu wo der Verbindungserror passiert ist
 def create_database(cursor, db_name):
     try:
          cursor.execute("CREATE DATABASE IF NOT EXISTS {} DEFAULT CHARACTER SET 'utf8'".format(db_name))
@@ -44,6 +48,8 @@ def create_database(cursor, db_name):
         print("Failed to create database: {}".format(err))
         exit(2)
 
+#Zusammenstellen der 2 arrays in der passenden Reihgenfolge für die Datenbank. array4 hat Daten, array7 hat die Informationen zur Station
+#Bei fehlenden Daten fügen wir default Werte ein die klar erkennbar sind
 def adjhistdata(array4, array7):
     global array5
     array5 = array4[:]
@@ -68,6 +74,9 @@ def adjhistdata(array4, array7):
             array5[i].append(0)
             array5[i].append(0)
             array5[i].append(100000)
+
+
+# Die Daten werden nun von text auf das Format gebracht was für die jeweilige Spalte notwendig ist und in die Datenbank eingefügt.
 
 def filldatabase(array5, cnx, table_name):
     id = [int(float(k[0])) for k in array5]
@@ -97,6 +106,7 @@ def filldatabase(array5, cnx, table_name):
         cursor.executemany('INSERT INTO ' + table_name + '  (Stations_id, Stationsname, Land, Zeitraum, Datenquelle, Januar, Februar, Marz, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember, avg_Jahr, latitude, longitude, Stationshoehe) '
                     'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE Stations_id = Stations_id',array6)
 
+#Versucht mit MYSQL zu verbinden. und erkennt ob die Datenbank schon existiert oder noch erstellt werden muss.
 def database(db_name):
     global cnx, cursor
     try:
@@ -117,6 +127,9 @@ def database(db_name):
         print("Failed to create database: {}".format(err))
         exit(3)
 
+
+#Erstellung der Tables für die jeweilige Datenbank. Aktuell kann keine Spalte nachträglich eingefügt werden sondern muss bei der intiaisierung schon dabei sein.
+#Primary Key besteht aus 3 Komponenten um sicherzustellen das benötigten Daten in die Datenbank eingefügt werden
 def tables(table_name):
     global createtable
     createtable = """CREATE TABLE IF NOT EXISTS """ + table_name + """ (
@@ -145,27 +158,8 @@ def tables(table_name):
                                        ) ENGINE=InnoDB
                                        """
 
-def dyncolnam(array4, array7):
 
-    columns = array4[0]
-
-    definition = []
-    for i, column in enumerate(columns):
-        if i == 0:
-            definition.append(f"`{column}` int NOT NULL AUTO_INCREMENT")
-        else:
-            definition.append(f"`{column}` float NOT NULL")
-
-    primary  = columns[0]
-
-    createtable = f"""CREATE TABLE IF NOT EXISTS {table_name} (
-                                       {',\n'.join(definition)},
-                                       PRIMARY KEY (`{primary}`)
-                                       ) ENGINE=InnoDB
-                                       """
-
-
-
+#wird nicht benutzt, ist aber vorhanden falls man eine Float Erkennung später braucht
 def is_number(s):
     try:
         float(s) # für Float- und Int-Werte
@@ -175,6 +169,7 @@ def is_number(s):
 
 
 
+#Durchführung aller nötigen Funktionen
 def getdata(url, urlsname, db_name, table_name):
     response = requests.get(url)
     file = response.text

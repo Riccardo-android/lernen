@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from fontTools.misc.cython import returns
 import time
 
-
+# Umrechnung der Längen und Breitengrade falls diese nicht im Dezimalformat angegeben wurden
 def grad_to_dezimal(long, lat):
     splong = long.replace('°', ' ').replace("'", ' ').replace('"', ' ').split()
     splat = lat.replace('°', ' ').replace("'", ' ').replace('"', ' ').split()
@@ -17,6 +17,7 @@ def grad_to_dezimal(long, lat):
         lat = -lat
     return round(long,6), round(lat,6)
 
+#Wir nehmen die Längen- und Breitengrade und stellen im richtigen Formaat woeder in die Datenbank
 def BreitGradinDez(array8):
     for i in range(1, len(array8)):
         longgrad = array8[i][2]
@@ -25,6 +26,7 @@ def BreitGradinDez(array8):
         array8[i][2] = new_long
         array8[i][3] = new_lat
 
+#entfernung von leeren Zeilen um nur die Daten anzeigen zu lassen die tatsächlich existieren
 def no_empty_elements(array8):
     array9 = []
     for row in array8:
@@ -32,6 +34,8 @@ def no_empty_elements(array8):
         array9.append(row_clean)
     return array9
 
+# Abrufen der Stationsübersicht. Da diese in html sind werden die hier umgewandelt. und passend formatiert.
+# Default Text beeinhaltet die Städte die spziell für dieses Projekt ausgewählt wurden um auf jeden Fall die passenden Daten für diese Stationen zu bekommen.
 def gettxtfromhtml(url):
 
     Jeju = "Jeju;47184;126°32'E;33°31'N;22;KOR;Republik Korea / Republic of Korea;Asien / Asia;\n;"
@@ -42,23 +46,29 @@ def gettxtfromhtml(url):
     Itzehoe = "Itzehoe;10142;9°34'E;53°59'N;26;DEU;Deutschland / Germany;Europa / Europe;\n;"
     fallback = "Stationsname;Station_id;longitude;latitude;hoehe;Landkurz;land;kontinent;\n;"+ Jeju + Goiania + Troll + München + Brocken + Itzehoe
 
+    #Versucht die Daten aus der HTML Website zu bekommen
     html_content = fetch_with_retries(url)
 
+    #keine erflogreiche ABfrage der HTML Daten? Default Text wird hergenommen
     if not html_content:
         text_output = fallback
         #print(f"gettxtfromhtml liefert zurück:\n{result[:500]}")  # max 500 Zeichen Ausgabe
-
         return text_output
+
+    #Herausfiltern der Tabellen auf der Website
     soup = BeautifulSoup(html_content, "html.parser")
     tables = soup.find_all("table")
 
+    #existieren kein Tabellen wird der Default Text hergenommen um Fehler bei unserer Präsentation zu vermeiden
     if not tables:
         #print(f"gettxtfromhtml liefert zurücko:\n{result[:500]}")  # max 500 Zeichen Ausgabe
         return fallback
 
+    # Tabelle 1 wird hergenommen. Da auf der DWD Seite für die Stationen nur 1 existiert gibt das für dieses Projekt sicher keine Probleme
     station_table = tables[0]
     result = ""
 
+    #Wir holen uns den Text aus der gerade angegebenen Tabelle und formatieren ihn passend für die anderen Funktionen die diesen Text dann bearbeiten
     for row in station_table.find_all("tr"):
         cells = row.find_all(["th", "td"])
         line = ";".join(cell.get_text(strip = True)+";" for cell in cells)
@@ -67,12 +77,12 @@ def gettxtfromhtml(url):
     return result
 #print(text_output)
 
-
+#Versuch an die HTML Website zu kommen. 5 Versuche im Abstand von 1 Sekunde.  Falls unerfolgreich wird eine Fehlertext zurückgegeben der uns im Logfile des Containers dann angezeigt wird
 def fetch_with_retries(url, max_retries=5, wait_seconds=1, fallback_text="Fehler beim Laden der Seite."):
     attempt = 0
     while attempt < max_retries:
         try:
-            response = requests.get(url, timeout=10)
+            response = requests.get(url, timeout=10) # Versucht an den Inhalt zu kommen und hat 10 Sekunden Zeit eine Antwort vom Client zu bekommen
             response.raise_for_status()  # wirft einen Fehler bei HTTP-Status 4xx/5xx
             return response.text
         except requests.exceptions.RequestException as e:
@@ -80,6 +90,10 @@ def fetch_with_retries(url, max_retries=5, wait_seconds=1, fallback_text="Fehler
             time.sleep(wait_seconds)
             attempt += 1
     return fallback_text
+
+
+#da wir 2 Webseiten mit Daten haben und eine mit den Daten für die Stationen. werden erst die 2 datenarrays zusammengeführt.
+#die Arrays werden passend formatiert und bekommen bei fehlenden Werten, Fülldaten die die Auswertung nicht groß beeinflussen und auch bei Grafischen Darstellungen nicht direkt auffallen dürften
 
 def filltable(array4, array7, array8, city_name):
     global array5
@@ -108,8 +122,10 @@ def filltable(array4, array7, array8, city_name):
 
     #print(array5)
     if len(array5) > 1:
-        del array5[0]
+        del array5[0] #Überschriften werden gelöscht da sonst Fehler beim Einfüllen in die Datenbank.
 
+    #berechnung der Jahresdurchschnittstemperaturen
+    #0.0 wird nicht eingerechnet da dies aktuell ein Defaultwert für nicht vorhandene Werte ist
     for i, row in enumerate(array5):
 
         if len(row) == 13:
@@ -120,9 +136,9 @@ def filltable(array4, array7, array8, city_name):
                 jahr = 0.0
             array5[i].append(round(jahr, 1))
         else:
-            array5[i].append('0.0')  # oder '' als Platzhalter
+            array5[i].append('0.0')
 
-
+    #Angabe des Zeitraums für die Durchschnittsberechnung und berechnung der Monatsdurchschnittswerte. 0.0 wird mit eingerechnet - muss noch angepasst werden
     zeitraum = array5[0][0] + "-" + array5[-1][0]
     array10 = [zeitraum, jahr]
     for i in range(1, len(array5[0])-1):
@@ -136,6 +152,7 @@ def filltable(array4, array7, array8, city_name):
                 continue
         array10.insert(i, summ / k if k > 0 else 0.0)
     array5.append(array10)
+    #Einfügen und sortierung der Daten zu den Stationen
     for i in range(len(array5)):
         for j in range(len(array8)):
             if array8[j][0] == city_name:
@@ -147,7 +164,7 @@ def filltable(array4, array7, array8, city_name):
                 array5[i].append(array8[j][3])
                 array5[i].append(array8[j][4])
                 break
-    #print(array5)
+    # falls array8 nicht richtig formatiert ist (weil z.B. werte fehlen) werden defaultwerte eingefügt. Ist jedoch noch hardcoded auf 14 Elemente da dieses Probleme mit der DWD Stationsliste genauso auftritt (Stand: 02.06.25)
     for i in range(len(array5)):
         if len(array5[i]) == 14:
             array5[i].insert(0, 00000)
@@ -158,7 +175,7 @@ def filltable(array4, array7, array8, city_name):
             array5[i].append(0.000)
             array5[i].append(0)
 
-    #print(array5)
+#Durchführung aller nötigen Funktionen
 def getdata(urlhist, urlrec, urlstation, db_name, table_name, city_name):
     response = requests.get(urlhist)
     file = response.text

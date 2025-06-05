@@ -4,7 +4,7 @@ services:
   # MySQL Datenbank
   db:
     image: mysql:latest              # Verwendet das offizielle MySQL Image
-    restart: always                  # Startet den Container automatisch neu
+    restart: always                  # Startet den Container automatisch neu solange er nicht enfernt wird
     container_name: MYSQL           
     environment:                     # Umgebungsvariablen für MySQL Setup
       MYSQL_ROOT_PASSWORD: Pr!m4bAl13rina
@@ -12,31 +12,31 @@ services:
       MYSQL_USER: myuser            # Erstellt einen neuen Benutzer
       MYSQL_PASSWORD: mypassword
     ports: ['3307:3306']            # Port-Mapping: Host-Port 3307 zu Container-Port 3306
-    healthcheck:                     # Überprüft die Gesundheit des Containers
+    healthcheck:                     # checkt ob der Container ohne Error läuft, falls er innerhalb von 5sec. bereits "healthy" ist, ist der healthcheck irrelevant
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p Pr!m4bAl13rina"]
       start_period: 5s              # Wartezeit vor dem ersten Check
       interval: 5s                  # Intervall zwischen den Checks
       timeout: 5s                   # Timeout für jeden Check
       retries: 55                   # Anzahl der Wiederholungsversuche
     networks:
-      - monitoring                  # Verbindet mit dem monitoring Netzwerk
+      - monitoring                  # Network: Netzwerk
 
   # Datenverarbeitung
   python:
-    image: pythonscript            # Verwendet ein custom Python Image
+    image: pythonscript            #eigenes Docker Image. wird durch die Dockerfile erstellt.
     container_name: PYTHON
     build:
       context: ../..               # Build-Kontext für das Dockerfile
       dockerfile: data/Dockerfile
-    depends_on:                    # Wartet auf den MySQL Service
+    depends_on:                    # wartet bis der MYSQL Container fehlerfrei läuft
       db:
         condition: service_healthy
     networks:
       - monitoring
-    environment:                   # MySQL Verbindungseinstellungen
+    environment:                   # Verbindung zum MYSQL COntainer. Können sonst nicht drauf zugreifen
       MYSQL_HOST: db
       MYSQL_PORT: 3306
-    healthcheck:                   # Ähnliche Healthcheck-Konfiguration wie bei MySQL
+    healthcheck:                   # wieder healthcheck. Versucht mit dem MYSQL Container sich zu verbinden. Unnötig
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p Pr!m4bAl13rina" ]
       start_period: 5s
       interval: 5s
@@ -44,21 +44,20 @@ services:
       retries: 55
 
   openmeteo-exporter:
-    image: openmeteo
+    image: openmeteo                                #eigenes Docker Image. wird durch die Dockerfile erstellt. selbiges wie beim PYTHON Container
     container_name: Openmeteo
     build:
       context: ../..
       dockerfile: src/Docker/Dockerfile
     ports:
       - "8000:8000"
-    restart: unless-stopped
-    depends_on: # Wartet auf den MySQL Service
+    restart: unless-stopped                       # restarted den Conatiner unabhängig vom Exit Code
+    depends_on:                                   # Wartet auf den MySQL Container da wir auf die Datenbank zugreifen müssen
       db:
         condition: service_healthy
-
     networks:
       - monitoring
-    environment:
+    environment:                                  # Verbindung zum MYSQL Container
       MYSQL_HOST: db
       MYSQL_PORT: 3306
 
@@ -78,7 +77,7 @@ services:
      image: grafana/grafana      # Offizielles Grafana Image
      container_name: Grafana
      ports:
-       - 3000:3000              # Standard Grafana Web-Interface Port
+       - 3000:3000              # Standard Grafana Port
      environment:               # Admin Zugangsdaten für Grafana
        - GF_SECURITY_ADMIN_USER=MyLittleEdi3978
        - GF_SECURITY_ADMIN_PASSWORD=HappyHippo
@@ -88,6 +87,6 @@ services:
 # Netzwerk-Konfiguration
 networks:
   monitoring:                    # Hauptnetzwerk für alle Services
-    driver: bridge              # Verwendet den Bridge-Netzwerk-Treiber
+    driver: bridge              # Bridge Treiber um die Conatiner miteinander zu verbinden
 
     #external: true            # Auskommentiert, da kein externes Netzwerk verwendet wird

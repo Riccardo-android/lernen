@@ -1,5 +1,8 @@
 import histflivefunc
 import sqldatadef
+
+# Hier werden nur die Funktionen, in die wir brauchen um die Datenbank zu füllen aufgerufen. Damit es einfacher ist, wurde der gesamte Ablauf in getdata gepackt
+#Funktionsdefinition da wir über einen Container 2 Scripte ausführen müssen. wird in sqldata.py aufgerufen
 def usehistflive():
 
     urlstation = "https://www.dwd.de/DE/leistungen/klimadatenweltweit/stationsverzeichnis.html?lsbId=374532"

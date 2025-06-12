@@ -4,14 +4,14 @@
       {
         "builtIn": 1,
         "datasource": {
-          "type": "grafana",
+          "type": "grafana",  //Grafik in Grafana erstellen
           "uid": "-- Grafana --"
         },
         "enable": true,
         "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
+        "iconColor": "rgba(0, 211, 255, 1)", //Farbe der Grafik in Rot zu Grün,
         "name": "Annotations & Alerts",
-        "type": "dashboard"
+        "type": "dashboard" //"Grafiktyp in grafana"
       }
     ]
   },
@@ -23,33 +23,33 @@
   "panels": [
     {
       "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 0
+        "h": 8,    //Wetterdaten von 1961-1990 von München
+        "w": 24,   //Wetterdaten von 1971-1980 von München
+        "x": 0,    //Wetterdaten von 1981-2000 von München
+        "y": 0     //Wetterdaten von 1991-2020 von München
       },
       "id": 3,
       "libraryPanel": {
         "name": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in München",
-        "uid": "denqomhvwb9c0c"
+        "uid": "denqomhvwb9c0c" //Überschrift der Grafik im Panel
       },
       "title": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in München",
-      "type": "library-panel-ref"
+      "type": "library-panel-ref" //Überschrift des Panels
     },
     {
       "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 8
+        "h": 6,    //Wetterdaten von 1961-1990 von Ingolstadt
+        "w": 24,   //Wetterdaten von 1971-1980 von Ingosltadt
+        "x": 0,    //Wetterdaten von 1981-2000 von Ingolstadt
+        "y": 8     //Wetterdaten von 1991-2020 von Ingolstadt
       },
       "id": 2,
       "libraryPanel": {
         "name": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in Ingolstadt",
-        "uid": "denqom6r63ocgd"
+        "uid": "denqom6r63ocgd" //Überschrift der Grafik im Panel
       },
       "title": "Durchschnitstemperaturen von Januar bis Dezember von 1961-2020 in Ingolstadt",
-      "type": "library-panel-ref"
+      "type": "library-panel-ref" //Überschrit des Panels
     }
   ],
   "preload": false,
@@ -59,12 +59,12 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-6h",  //Zeitzyklus des Automstischen updates
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Vergleich der Durschnittstemperaturen der Moante Jan - Dez von Ingosltadt und München",
+  "title": "Vergleich der Durschnittstemperaturen der Moante Jan - Dez von Ingosltadt und München", //Überschrift des Dashboard
   "uid": "2568692a-b528-4833-9cb8-15dd47575411",
   "version": 5
 }

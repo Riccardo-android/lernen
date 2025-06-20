@@ -4,8 +4,8 @@ import histflive
 #Aufrufen der histlive.py da wir somit 2 scripte üben einen Conatiner ausführen können
 histflive.usehistflive()
 
-# Hier werden nur die Funktionen, in die wir brauchen um die Datenbank zu füllen aufgerufen. Damit es einfacher ist, wurde der gesamte Ablauf in getdata gepackt
-#zwischen 2 trennlinien behandeln alle funktionsaufrufe das gleiche Thema
+""" Hier werden nur die Funktionen, in die wir brauchen um die Datenbank zu füllen aufgerufen. Damit es einfacher ist, wurde der gesamte Ablauf in getdata gepackt
+zwischen 2 trennlinien behandeln alle funktionsaufrufe das gleiche Thema"""
 
 DB_NAME = "hist_climate_ger"
 TABLE_NAME = "avg_temp_ger_6120"
